@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 
 const expenseCategories = [
   'Taxes', 'Insurance', 'Trash', 'Gas/Electric', 'Internet', 'HOA',
@@ -15,9 +15,9 @@ const DealChadAI: React.FC = () => {
     monthsUntilFlip: 3,
     interestRate: 6,
     loanTerm: 30,
-    expenses: {}
+    expenses: {} as Record<string, number>
   });
-  const [selectedExpenses, setSelectedExpenses] = useState([]);
+  const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
   const [showResult, setShowResult] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
@@ -29,7 +29,7 @@ const DealChadAI: React.FC = () => {
     }));
   };
 
-const handleExpenseSelection = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleExpenseSelection = (e: ChangeEvent<HTMLSelectElement>) => {
     const expense = e.target.value;
     if (!selectedExpenses.includes(expense)) {
       setSelectedExpenses(prev => [...prev, expense]);
