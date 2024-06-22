@@ -5,7 +5,7 @@ const expenseCategories = [
   'Water/Sewer', 'Heat', 'Lawn/Snow', 'Phone Bill', 'Extra'
 ];
 
-const DealChadAI = () => {
+const DealChadAI: React.FC = () => {
   const [dealData, setDealData] = useState({
     purchasePrice: 150000,
     downPaymentPercent: 20,
@@ -21,7 +21,7 @@ const DealChadAI = () => {
   const [showResult, setShowResult] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDealData(prevData => ({
       ...prevData,
@@ -29,7 +29,7 @@ const DealChadAI = () => {
     }));
   };
 
-  const handleExpenseSelection = (e) => {
+const handleExpenseSelection = (e: ChangeEvent<HTMLSelectElement>) => {
     const expense = e.target.value;
     if (!selectedExpenses.includes(expense)) {
       setSelectedExpenses(prev => [...prev, expense]);
@@ -43,7 +43,7 @@ const DealChadAI = () => {
     }
   };
 
-  const handleExpenseChange = (expense, value) => {
+  const handleExpenseChange = (expense: string, value: string) => {
     setDealData(prevData => ({
       ...prevData,
       expenses: {
