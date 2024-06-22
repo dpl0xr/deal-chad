@@ -86,10 +86,10 @@ const DealChadAI: React.FC = () => {
 
       setShowResult(true);
       setIsAnalyzing(false);
-    }, 1500); // Simulating analysis time
+    }, 1500);
   };
 
-  const calculateMortgage = (principal, interestRate, years) => {
+  const calculateMortgage = (principal: number, interestRate: number, years: number): number => {
     const r = interestRate / 100 / 12;
     const n = years * 12;
     return (principal * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
