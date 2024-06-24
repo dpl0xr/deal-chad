@@ -66,6 +66,7 @@ const DealChadAI: React.FC = () => {
       ...prevData,
       [name]: isNaN(numericValue) ? 0 : numericValue
     }));
+    return formatCurrency(numericValue);
   };
 
   const handleExpenseSelection = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -184,8 +185,10 @@ const DealChadAI: React.FC = () => {
               <label className="block mb-1 font-semibold">{expense} ($)</label>
               <input 
                 type="text" 
-                value={dealData.expenses[expense]?.toString() || ''}
-                onChange={(e) => handleExpenseChange(expense, e.target.value)}
+                value={formatCurrency(dealData.expenses[expense] || 0)}
+                onChange={(e) => {const formattedValue = handleExpenseChange(expense, e.target.value);
+                e.target.value = formattedValue;
+                }}
                 className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <div className="text-sm text-gray-500 mt-1">
