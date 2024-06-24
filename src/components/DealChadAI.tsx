@@ -44,17 +44,26 @@ const DealChadAI: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const formatCurrency = (value: number): string => {
-    return value.toLocaleString('en-US', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    });
+    }).format(value);
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g,""));
+    let numericValue: number;
+
+    if (name === 'monthsUntilFlip' || name === 'loanTerm') {
+      numericValue = parseInt(value, 10);
+    } else if (name === 'downPaymentPercent' || name === 'closingCostsPercent' || name === 'interestRate') {
+      numericValue = parseFloat(value);
+    } else {
+      numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ""));
+    }
+
     setDealData(prevData => ({
       ...prevData,
       [name]: isNaN(numericValue) ? 0 : numericValue
@@ -76,7 +85,7 @@ const DealChadAI: React.FC = () => {
   };
 
   const handleExpenseChange = (expense: string, value: string) => {
-    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g,""));
+    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ""));
     setDealData(prevData => ({
       ...prevData,
       expenses: {
@@ -136,7 +145,7 @@ const DealChadAI: React.FC = () => {
 
   const formatInputValue = (key: string, value: number): string => {
     if (['monthsUntilFlip', 'loanTerm'].includes(key)) return value.toString();
-    if (key.toLowerCase().includes('percent') || key === 'interestRate') return `${value}%`;
+    if (key.toLowerCase().includes('percent') || key === 'interestRate') return value.toString();
     return formatCurrency(value);
   };
 
