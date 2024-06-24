@@ -124,7 +124,7 @@ const DealChadAI: React.FC = () => {
       const expensesDuringHolding = totalMonthlyExpenses * dealData.monthsUntilFlip;
       const anticipatedProfit = dealData.afterRepairValue - dealData.purchasePrice - dealData.estimateRepairs - closingCosts - expensesDuringHolding;
       const seventyPercentARV = dealData.afterRepairValue * 0.7;
-      const maxOffer = seventyPercentARV - dealData.estimateRepairs - closingCosts;
+      const maxOffer = seventyPercentARV - dealData.estimateRepairs;
       const returnOnInvestment = (anticipatedProfit / totalCapitalNeeded) * 100;
 
       setDealData(prevData => ({
