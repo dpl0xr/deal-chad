@@ -52,6 +52,14 @@ const DealChadAI: React.FC = () => {
     }).format(value);
   };
 
+  const formatPercent = (value: number): string => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'percent',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(value / 100);
+  };
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let numericValue: number;
@@ -59,14 +67,19 @@ const DealChadAI: React.FC = () => {
     if (['monthsUntilFlip', 'loanTerm'].includes(name)) {
       numericValue = parseInt(value, 10);
     } else {
-      numericValue = parseFloat(value.replace(/,/g, ''));
+      numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
+    }
+
+    if (['purchasePrice', 'estimateRepairs', 'afterRepairValue'].includes(name)) {
+      e.target.value = formatCurrency(numericValue);
+    } else if (['downPaymentPercent', 'closingCostsPercent', 'interestRate'].includes(name)) {
+      e.target.value = formatPercent(numericValue);
     }
 
     setDealData(prevData => ({
       ...prevData,
       [name]: isNaN(numericValue) ? 0 : numericValue
     }));
-    return formatCurrency(numericValue);
   };
 
   const handleExpenseSelection = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -84,7 +97,7 @@ const DealChadAI: React.FC = () => {
   };
 
   const handleExpenseChange = (expense: string, value: string) => {
-    const numericValue = parseFloat(value.replace(/,/g, ''));
+    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
     setDealData(prevData => ({
       ...prevData,
       expenses: {
@@ -92,6 +105,7 @@ const DealChadAI: React.FC = () => {
         [expense]: isNaN(numericValue) ? 0 : numericValue
       }
     }));
+    return formatCurrency(numericValue);
   };
 
   const calculateDeal = () => {
@@ -108,7 +122,7 @@ const DealChadAI: React.FC = () => {
       const expensesDuringHolding = totalMonthlyExpenses * dealData.monthsUntilFlip;
       const anticipatedProfit = dealData.afterRepairValue - dealData.purchasePrice - dealData.estimateRepairs - closingCosts - expensesDuringHolding;
       const seventyPercentARV = dealData.afterRepairValue * 0.7;
-      const maxOffer = seventyPercentARV - dealData.estimateRepairs;
+      const maxOffer = seventyPercentARV - dealData.estimateRepairs - closingCosts;
       const returnOnInvestment = (anticipatedProfit / totalCapitalNeeded) * 100;
 
       setDealData(prevData => ({
@@ -136,6 +150,15 @@ const DealChadAI: React.FC = () => {
     return (principal * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
   };
 
+  const getInputValue = (key: string, value: number): string => {
+    if (['purchasePrice', 'estimateRepairs', 'afterRepairValue'].includes(key)) {
+      return formatCurrency(value);
+    } else if (['downPaymentPercent', 'closingCostsPercent', 'interestRate'].includes(key)) {
+      return formatPercent(value);
+    }
+    return value.toString();
+  };
+
   return (
     <div className="p-4 max-w-md mx-auto bg-gray-100 rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Deal Chad AI</h1>
@@ -149,14 +172,10 @@ const DealChadAI: React.FC = () => {
                 <input 
                   type="text"
                   name={key}
-                  value={value.toString()}
+                  value={getInputValue(key, value)}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                {!['monthsUntilFlip', 'loanTerm', 'downPaymentPercent', 'closingCostsPercent', 'interestRate'].includes(key) && (
-                  <div className="text-sm text-gray-500 mt-1">
-                  </div>
-                )}
               </div>
             );
           }
@@ -182,18 +201,16 @@ const DealChadAI: React.FC = () => {
         <div className="space-y-4 mb-6">
           {selectedExpenses.map(expense => (
             <div key={expense}>
-              <label className="block mb-1 font-semibold">{expense} ($)</label>
+              <label className="block mb-1 font-semibold">{expense}</label>
               <input 
                 type="text" 
                 value={formatCurrency(dealData.expenses[expense] || 0)}
-                onChange={(e) => {const formattedValue = handleExpenseChange(expense, e.target.value);
-                e.target.value = formattedValue;
+                onChange={(e) => {
+                  const formattedValue = handleExpenseChange(expense, e.target.value);
+                  e.target.value = formattedValue;
                 }}
                 className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <div className="text-sm text-gray-500 mt-1">
-                Formatted: {formatCurrency(dealData.expenses[expense] || 0)}
-              </div>
             </div>
           ))}
         </div>
@@ -219,17 +236,17 @@ const DealChadAI: React.FC = () => {
           <p className="mb-2"><strong>Anticipated Profit:</strong> {formatCurrency(dealData.anticipatedProfit || 0)}</p>
           <p className="mb-2"><strong>70% of ARV:</strong> {formatCurrency(dealData.seventyPercentARV || 0)}</p>
           <p className="mb-2"><strong>Max Offer for Home:</strong> {formatCurrency(dealData.maxOffer || 0)}</p>
-          <p className="mb-4"><strong>Return on Investment:</strong> {dealData.returnOnInvestment?.toFixed(2)}%</p>
+          <p className="mb-4"><strong>Return on Investment:</strong> {formatPercent(dealData.returnOnInvestment || 0)}</p>
           
           <div className="mt-6 text-center">
             {dealData.returnOnInvestment && dealData.returnOnInvestment > 20 ? (
               <div>
-                <img src="https://libertymaniacs.com/cdn/shop/products/mockup-d0266ae6_1200x.jpg?v=1601318190" alt="Chad Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
+                <img src="/api/placeholder/300/300" alt="Chad Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
                 <p className="text-lg font-semibold text-green-600">Great deal! 👍 The ROI is above 20%, which is considered excellent for a fix and flip.</p>
               </div>
             ) : (
               <div>
-                <img src="https://m.media-amazon.com/images/I/61d19RCFk2L.jpg" alt="Crying Wojak Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
+                <img src="/api/placeholder/300/300" alt="Crying Wojak Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
                 <p className="text-lg font-semibold text-red-600">Not a great deal. 👎 The ROI is below 20%, which is considered risky for a fix and flip.</p>
               </div>
             )}
