@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, FocusEvent } from 'react';
 
 const expenseCategories = [
   'Taxes', 'Insurance', 'Trash', 'Gas/Electric', 'Internet', 'HOA',
@@ -42,6 +42,7 @@ const DealChadAI: React.FC = () => {
   const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
   const [showResult, setShowResult] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat('en-US', {
@@ -70,16 +71,18 @@ const DealChadAI: React.FC = () => {
       numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
     }
 
-    if (['purchasePrice', 'estimateRepairs', 'afterRepairValue'].includes(name)) {
-      e.target.value = formatCurrency(numericValue);
-    } else if (['downPaymentPercent', 'closingCostsPercent', 'interestRate'].includes(name)) {
-      e.target.value = formatPercent(numericValue);
-    }
-
     setDealData(prevData => ({
       ...prevData,
       [name]: isNaN(numericValue) ? 0 : numericValue
     }));
+  };
+
+  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
+    setFocusedField(e.target.name);
+  };
+
+  const handleBlur = () => {
+    setFocusedField(null);
   };
 
   const handleExpenseSelection = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -105,7 +108,6 @@ const DealChadAI: React.FC = () => {
         [expense]: isNaN(numericValue) ? 0 : numericValue
       }
     }));
-    return formatCurrency(numericValue);
   };
 
   const calculateDeal = () => {
@@ -151,6 +153,9 @@ const DealChadAI: React.FC = () => {
   };
 
   const getInputValue = (key: string, value: number): string => {
+    if (focusedField === key) {
+      return value.toString();
+    }
     if (['purchasePrice', 'estimateRepairs', 'afterRepairValue'].includes(key)) {
       return formatCurrency(value);
     } else if (['downPaymentPercent', 'closingCostsPercent', 'interestRate'].includes(key)) {
@@ -174,6 +179,8 @@ const DealChadAI: React.FC = () => {
                   name={key}
                   value={getInputValue(key, value)}
                   onChange={handleInputChange}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
                   className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
@@ -204,11 +211,11 @@ const DealChadAI: React.FC = () => {
               <label className="block mb-1 font-semibold">{expense}</label>
               <input 
                 type="text" 
-                value={formatCurrency(dealData.expenses[expense] || 0)}
-                onChange={(e) => {
-                  const formattedValue = handleExpenseChange(expense, e.target.value);
-                  e.target.value = formattedValue;
-                }}
+                name={`expense-${expense}`}
+                value={focusedField === `expense-${expense}` ? (dealData.expenses[expense] || '').toString() : formatCurrency(dealData.expenses[expense] || 0)}
+                onChange={(e) => handleExpenseChange(expense, e.target.value)}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
