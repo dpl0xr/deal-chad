@@ -119,6 +119,7 @@ const DealChadAI: React.FC = () => {
 
   return (
     <div className="p-4 max-w-md mx-auto bg-gray-100 rounded-lg shadow-lg">
+       <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Deal Chad AI</h1>
       {/* ... (rest of the JSX remains the same) ... */}
       
       {showResult && (
