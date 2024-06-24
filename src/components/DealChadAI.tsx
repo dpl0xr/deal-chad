@@ -155,7 +155,30 @@ const DealChadAI: React.FC = () => {
       {showResult && (
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-center">Deal Summary</h2>
-          {/* ... (result display logic remains the same) ... */}
+          <p className="mb-2"><strong>Downpayment:</strong> ${dealData.downPayment?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-2"><strong>Mortgage:</strong> ${dealData.mortgage?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-2"><strong>Closing Costs:</strong> ${dealData.closingCosts?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-2"><strong>Total Capital Needed:</strong> ${dealData.totalCapitalNeeded?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-2"><strong>Monthly Mortgage Payment:</strong> ${dealData.monthlyMortgage?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-2"><strong>Expenses during holding:</strong> ${dealData.expensesDuringHolding?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-2"><strong>Anticipated Profit:</strong> ${dealData.anticipatedProfit?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-2"><strong>70% of ARV:</strong> ${dealData.seventyPercentARV?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-2"><strong>Max Offer for Home:</strong> ${dealData.maxOffer?.toFixed(2) || 'N/A'}</p>
+          <p className="mb-4"><strong>Return on Investment:</strong> {dealData.returnOnInvestment?.toFixed(2) || 'N/A'}%</p>
+          
+          <div className="mt-6 text-center">
+            {dealData.returnOnInvestment && dealData.returnOnInvestment > 20 ? (
+              <div>
+                <img src="/api/placeholder/300/300" alt="Chad Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
+                <p className="text-lg font-semibold text-green-600">Great deal! 👍 The ROI is above 20%, which is considered excellent for a fix and flip.</p>
+              </div>
+            ) : (
+              <div>
+                <img src="/api/placeholder/300/300" alt="Crying Wojak Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
+                <p className="text-lg font-semibold text-red-600">Not a great deal. 👎 The ROI is below 20%, which is considered risky for a fix and flip.</p>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
