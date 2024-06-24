@@ -43,11 +43,21 @@ const DealChadAI: React.FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  const formatCurrency = (value: number): string => {
+    return value.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  };
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g,""));
     setDealData(prevData => ({
       ...prevData,
-      [name]: parseFloat(value) || 0
+      [name]: isNaN(numericValue) ? 0 : numericValue
     }));
   };
 
@@ -66,11 +76,12 @@ const DealChadAI: React.FC = () => {
   };
 
   const handleExpenseChange = (expense: string, value: string) => {
+    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g,""));
     setDealData(prevData => ({
       ...prevData,
       expenses: {
         ...prevData.expenses,
-        [expense]: parseFloat(value) || 0
+        [expense]: isNaN(numericValue) ? 0 : numericValue
       }
     }));
   };
@@ -128,9 +139,9 @@ const DealChadAI: React.FC = () => {
               <div key={key}>
                 <label className="block mb-2 font-semibold">{key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</label>
                 <input 
-                  type="number" 
+                  type="text" 
                   name={key}
-                  value={value}
+                  value={key.toLowerCase().includes('percent') ? `${value}%` : formatCurrency(value)}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -161,8 +172,8 @@ const DealChadAI: React.FC = () => {
             <div key={expense}>
               <label className="block mb-1 font-semibold">{expense} ($)</label>
               <input 
-                type="number" 
-                value={dealData.expenses[expense] || ''}
+                type="text" 
+                value={formatCurrency(dealData.expenses[expense] || 0)}
                 onChange={(e) => handleExpenseChange(expense, e.target.value)}
                 className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -182,15 +193,15 @@ const DealChadAI: React.FC = () => {
       {showResult && (
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-center">Deal Summary</h2>
-          <p className="mb-2"><strong>Downpayment:</strong> ${dealData.downPayment?.toFixed(2)}</p>
-          <p className="mb-2"><strong>Mortgage:</strong> ${dealData.mortgage?.toFixed(2)}</p>
-          <p className="mb-2"><strong>Closing Costs:</strong> ${dealData.closingCosts?.toFixed(2)}</p>
-          <p className="mb-2"><strong>Total Capital Needed:</strong> ${dealData.totalCapitalNeeded?.toFixed(2)}</p>
-          <p className="mb-2"><strong>Monthly Mortgage Payment:</strong> ${dealData.monthlyMortgage?.toFixed(2)}</p>
-          <p className="mb-2"><strong>Expenses during holding:</strong> ${dealData.expensesDuringHolding?.toFixed(2)}</p>
-          <p className="mb-2"><strong>Anticipated Profit:</strong> ${dealData.anticipatedProfit?.toFixed(2)}</p>
-          <p className="mb-2"><strong>70% of ARV:</strong> ${dealData.seventyPercentARV?.toFixed(2)}</p>
-          <p className="mb-2"><strong>Max Offer for Home:</strong> ${dealData.maxOffer?.toFixed(2)}</p>
+          <p className="mb-2"><strong>Downpayment:</strong> {formatCurrency(dealData.downPayment || 0)}</p>
+          <p className="mb-2"><strong>Mortgage:</strong> {formatCurrency(dealData.mortgage || 0)}</p>
+          <p className="mb-2"><strong>Closing Costs:</strong> {formatCurrency(dealData.closingCosts || 0)}</p>
+          <p className="mb-2"><strong>Total Capital Needed:</strong> {formatCurrency(dealData.totalCapitalNeeded || 0)}</p>
+          <p className="mb-2"><strong>Monthly Mortgage Payment:</strong> {formatCurrency(dealData.monthlyMortgage || 0)}</p>
+          <p className="mb-2"><strong>Expenses during holding:</strong> {formatCurrency(dealData.expensesDuringHolding || 0)}</p>
+          <p className="mb-2"><strong>Anticipated Profit:</strong> {formatCurrency(dealData.anticipatedProfit || 0)}</p>
+          <p className="mb-2"><strong>70% of ARV:</strong> {formatCurrency(dealData.seventyPercentARV || 0)}</p>
+          <p className="mb-2"><strong>Max Offer for Home:</strong> {formatCurrency(dealData.maxOffer || 0)}</p>
           <p className="mb-4"><strong>Return on Investment:</strong> {dealData.returnOnInvestment?.toFixed(2)}%</p>
           
           <div className="mt-6 text-center">
