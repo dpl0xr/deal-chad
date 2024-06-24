@@ -56,12 +56,10 @@ const DealChadAI: React.FC = () => {
     const { name, value } = e.target;
     let numericValue: number;
 
-    if (name === 'monthsUntilFlip' || name === 'loanTerm') {
+    if (['monthsUntilFlip', 'loanTerm'].includes(name)) {
       numericValue = parseInt(value, 10);
-    } else if (name === 'downPaymentPercent' || name === 'closingCostsPercent' || name === 'interestRate') {
-      numericValue = parseFloat(value);
     } else {
-      numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ""));
+      numericValue = parseFloat(value.replace(/,/g, ''));
     }
 
     setDealData(prevData => ({
@@ -85,7 +83,7 @@ const DealChadAI: React.FC = () => {
   };
 
   const handleExpenseChange = (expense: string, value: string) => {
-    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ""));
+    const numericValue = parseFloat(value.replace(/,/g, ''));
     setDealData(prevData => ({
       ...prevData,
       expenses: {
@@ -137,18 +135,6 @@ const DealChadAI: React.FC = () => {
     return (principal * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
   };
 
-  const getInputType = (key: string): string => {
-    if (['monthsUntilFlip', 'loanTerm'].includes(key)) return 'number';
-    if (key.toLowerCase().includes('percent') || key === 'interestRate') return 'number';
-    return 'text';
-  };
-
-  const formatInputValue = (key: string, value: number): string => {
-    if (['monthsUntilFlip', 'loanTerm'].includes(key)) return value.toString();
-    if (key.toLowerCase().includes('percent') || key === 'interestRate') return value.toString();
-    return formatCurrency(value);
-  };
-
   return (
     <div className="p-4 max-w-md mx-auto bg-gray-100 rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Deal Chad AI</h1>
@@ -160,13 +146,17 @@ const DealChadAI: React.FC = () => {
               <div key={key}>
                 <label className="block mb-2 font-semibold">{key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</label>
                 <input 
-                  type={getInputType(key)}
+                  type="text"
                   name={key}
-                  value={formatInputValue(key, value)}
+                  value={value.toString()}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  step={getInputType(key) === 'number' ? 'any' : undefined}
                 />
+                {!['monthsUntilFlip', 'loanTerm', 'downPaymentPercent', 'closingCostsPercent', 'interestRate'].includes(key) && (
+                  <div className="text-sm text-gray-500 mt-1">
+                    Formatted: {formatCurrency(value)}
+                  </div>
+                )}
               </div>
             );
           }
@@ -195,10 +185,13 @@ const DealChadAI: React.FC = () => {
               <label className="block mb-1 font-semibold">{expense} ($)</label>
               <input 
                 type="text" 
-                value={formatCurrency(dealData.expenses[expense] || 0)}
+                value={dealData.expenses[expense]?.toString() || ''}
                 onChange={(e) => handleExpenseChange(expense, e.target.value)}
                 className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              <div className="text-sm text-gray-500 mt-1">
+                Formatted: {formatCurrency(dealData.expenses[expense] || 0)}
+              </div>
             </div>
           ))}
         </div>
