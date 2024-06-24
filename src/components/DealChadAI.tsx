@@ -248,12 +248,12 @@ const DealChadAI: React.FC = () => {
           <div className="mt-6 text-center">
             {dealData.returnOnInvestment && dealData.returnOnInvestment > 20 ? (
               <div>
-                <img src="/api/placeholder/300/300" alt="Chad Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
+                <img src="https://i.imgur.com/nfRu2UV.png" alt="Chad Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
                 <p className="text-lg font-semibold text-green-600">Great deal! 👍 The ROI is above 20%, which is considered excellent for a fix and flip.</p>
               </div>
             ) : (
               <div>
-                <img src="/api/placeholder/300/300" alt="Crying Wojak Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
+                <img src="https://i.imgur.com/Bcs2nHU.png" alt="Crying Wojak Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
                 <p className="text-lg font-semibold text-red-600">Not a great deal. 👎 The ROI is below 20%, which is considered risky for a fix and flip.</p>
               </div>
             )}
