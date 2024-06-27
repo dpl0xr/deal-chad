@@ -235,7 +235,7 @@ const DealChadAI: React.FC = () => {
           <h2 className="text-3xl font-bold mb-4 text-center">Deal Analysis</h2>
 
             <div className="mb-6">
-            <p className="mb-3"><strong>Max Offer:</strong> {formatCurrency(dealData.maxOffer || 0)}</p>
+            <p className="mb-2"><strong>Max Offer:</strong> {formatCurrency(dealData.maxOffer || 0)}</p>
             <p className="mb-2"><strong>Total Capital Required:</strong> {formatCurrency(dealData.totalCapitalNeeded || 0)}</p>
             </div>
 
@@ -261,12 +261,12 @@ const DealChadAI: React.FC = () => {
         <div className="mt-6 text-center">
         {dealData.returnOnInvestment && dealData.returnOnInvestment > 20 ? (
       <>
-        <img src="https://i.imgur.com/nfRu2UV.png" alt="Chad Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
+        <img src="https://i.imgur.com/nfRu2UV.png" alt="Chad Meme" className="mx-auto mb-4 rounded-lg" />
         <p className="text-lg font-semibold text-green-600">Great deal! 👍 The ROI is above 20%, which is considered excellent for a fix and flip.</p>
       </>
     ) : (
       <>
-        <img src="https://i.imgur.com/Bcs2nHU.png" alt="Crying Wojak Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
+        <img src="https://i.imgur.com/Bcs2nHU.png" alt="Crying Wojak Meme" className="mx-auto mb-4 rounded-lg" />
         <p className="text-lg font-semibold text-red-600">Not a great deal. 👎 The ROI is below 20%, which is considered risky for a fix and flip.</p>
       </>
     )}
