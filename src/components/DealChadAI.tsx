@@ -180,7 +180,7 @@ const DealChadAI: React.FC = () => {
                   onChange={handleInputChange}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
-                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right placeholder-left"
+                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-left placeholder-left"
                 />
               </div>
             );
