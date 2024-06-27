@@ -240,7 +240,6 @@ const DealChadAI: React.FC = () => {
           <p className="mb-2"><strong>Monthly Mortgage Payment:</strong> {formatCurrency(dealData.monthlyMortgage || 0)}</p>
           <p className="mb-2"><strong>Expenses during holding:</strong> {formatCurrency(dealData.expensesDuringHolding || 0)}</p>
           <p className="mb-2"><strong>Anticipated Profit:</strong> {formatCurrency(dealData.anticipatedProfit || 0)}</p>
-          <p className="mb-2"><strong>70% of ARV:</strong> {formatCurrency(dealData.seventyPercentARV || 0)}</p>
           <p className="mb-2"><strong>Max Offer for Home:</strong> {formatCurrency(dealData.maxOffer || 0)}</p>
           <p className="mb-4"><strong>Return on Investment:</strong> {formatPercent(dealData.returnOnInvestment || 0)}</p>
           
