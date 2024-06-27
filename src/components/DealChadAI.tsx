@@ -232,36 +232,34 @@ const DealChadAI: React.FC = () => {
       
       {showResult && (
         <div className="bg-white p-6 rounded-lg shadow-md">
-  <h2 className="text-2xl font-bold mb-4 text-center">Deal Analysis</h2>
+          <h2 className="text-3xl font-bold mb-4 text-center">Deal Analysis</h2>
 
-  <div className="mb-6">
-    <p className="mb-2"><strong>Max Offer:</strong> {formatCurrency(dealData.maxOffer || 0)}</p>
-    <p className="mb-2"><strong>Total Capital Required:</strong> {formatCurrency(dealData.totalCapitalNeeded || 0)}</p>
-  </div>
+            <div className="mb-6">
+            <p className="mb-3"><strong>Max Offer:</strong> {formatCurrency(dealData.maxOffer || 0)}</p>
+            <p className="mb-2"><strong>Total Capital Required:</strong> {formatCurrency(dealData.totalCapitalNeeded || 0)}</p>
+            </div>
 
-  <hr className="border-t border-gray-300 my-4" />
+          <hr className="border-t border-gray-300 my-4" />
 
-  <div className="mb-6">
-    <h3 className="text-xl font-bold mb-2">Acquisition Information</h3>
-    <p className="mb-2"><strong>Closing Costs:</strong> {formatCurrency(dealData.closingCosts || 0)}</p>
-    <p className="mb-2"><strong>Down Payment:</strong> {formatCurrency(dealData.downPayment || 0)}</p>
-    <p className="mb-2"><strong>Total Mortgage:</strong> {formatCurrency(dealData.mortgage || 0)}</p>
-    <p className="mb-2"><strong>Monthly Mortgage Payment:</strong> {formatCurrency(dealData.monthlyMortgage || 0)}</p>
-  </div>
+            <div className="mb-6">
+            <h3 className="text-xl font-bold mb-2">Acquisition Information</h3>
+            <p className="mb-2"><strong>Closing Costs:</strong> {formatCurrency(dealData.closingCosts || 0)}</p>
+            <p className="mb-2"><strong>Down Payment:</strong> {formatCurrency(dealData.downPayment || 0)}</p>
+            <p className="mb-2"><strong>Total Mortgage:</strong> {formatCurrency(dealData.mortgage || 0)}</p>
+            <p className="mb-2"><strong>Monthly Mortgage Payment:</strong> {formatCurrency(dealData.monthlyMortgage || 0)}</p>
+            </div>
 
-  <hr className="border-t border-gray-300 my-4" />
+        <hr className="border-t border-gray-300 my-4" />
 
-  <div className="mb-6">
-    <h3 className="text-xl font-bold mb-2">Rehab Information</h3>
-    <p className="mb-2"><strong>Expenses During Flip:</strong> {formatCurrency(dealData.expensesDuringHolding || 0)}</p>
-    <p className="mb-2"><strong>Anticipated Profit:</strong> {formatCurrency(dealData.anticipatedProfit || 0)}</p>
-    <p className="mb-2"><strong>Return on Investment:</strong> {formatPercent(dealData.returnOnInvestment || 0)}</p>
-  </div>
+          <div className="mb-6">
+          <h3 className="text-xl font-bold mb-2">Rehab Information</h3>
+          <p className="mb-2"><strong>Expenses During Flip:</strong> {formatCurrency(dealData.expensesDuringHolding || 0)}</p>
+          <p className="mb-2"><strong>Anticipated Profit:</strong> {formatCurrency(dealData.anticipatedProfit || 0)}</p>
+          <p className="mb-2"><strong>Return on Investment:</strong> {formatPercent(dealData.returnOnInvestment || 0)}</p>
+          </div>
 
-  <hr className="border-t border-gray-300 my-4" />
-
-  <div className="mt-6 text-center">
-    {dealData.returnOnInvestment && dealData.returnOnInvestment > 20 ? (
+        <div className="mt-6 text-center">
+        {dealData.returnOnInvestment && dealData.returnOnInvestment > 20 ? (
       <>
         <img src="https://i.imgur.com/nfRu2UV.png" alt="Chad Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
         <p className="text-lg font-semibold text-green-600">Great deal! 👍 The ROI is above 20%, which is considered excellent for a fix and flip.</p>
