@@ -244,7 +244,7 @@ const DealChadAI: React.FC = () => {
           <p className="mb-2"><strong>Max Offer for Home:</strong> {formatCurrency(dealData.maxOffer || 0)}</p>
           <p className="mb-4"><strong>Return on Investment:</strong> {formatPercent(dealData.returnOnInvestment || 0)}</p>
           
-          <div className="mt-6 text-left">
+          <div className="mt-6 text-center">
             {dealData.returnOnInvestment && dealData.returnOnInvestment > 20 ? (
               <div>
                 <img src="https://i.imgur.com/nfRu2UV.png" alt="Chad Meme" className="mx-auto mb-4 rounded-lg shadow-md" />
